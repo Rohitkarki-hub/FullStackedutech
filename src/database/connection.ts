@@ -22,7 +22,7 @@ sequelize
     console.error("Unable to connect to the database:", err);
   });
 
-sequelize.sync({ alter: true }).then(() => {
+sequelize.sync({ force: false }).then(() => {
   console.log("migration successful");
 });
 

@@ -35,7 +35,15 @@ class Middleware {
       console.log("Decoded token:", decoded);
 
       {
-        const userData = await user.findByPk(decoded.id);
+        const userData = await user.findByPk(decoded.id, {
+          attributes: [
+            "id",
+            "username",
+            "email",
+            "role",
+            "currentInstituteNumber",
+          ],
+        });
         if (!userData) {
           res.status(404).json({ message: "User not found" });
 

@@ -90,6 +90,9 @@ const createTeacherTable = async (
     teacherName VARCHAR(255) NOT NULL,
     teacherEmail VARCHAR(255) NOT NULL UNIQUE,
     teacherPhone VARCHAR(255) NOT NULL UNIQUE,
+    teacherExpertise VARCHAR(255) NOT NULL,
+    joinDate DATE ,
+    salary VARCHAR(255) NOT NULL,
     
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -107,7 +110,10 @@ const createStudentTable = async (
     studentName VARCHAR(255) NOT NULL,
     studentEmail VARCHAR(255) NOT NULL UNIQUE,
     studentPhone VARCHAR(255) NOT NULL UNIQUE,
-    
+    studentAddress VARCHAR(255) NOT NULL,
+    enrollmentDate DATE,
+    studentImage VARCHAR(255),
+    courseLevel ENUM('beginner', 'intermediate', 'advanced') NOT NULL,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
   )`);
@@ -125,6 +131,9 @@ const createCourseTable = async (
     courseName VARCHAR(255) NOT NULL,
     coursePrice VARCHAR(255) NOT NULL UNIQUE,
     courseDescription TEXT,
+    courseDuration VARCHAR(255) NOT NULL,
+    coursseLevel ENUM('beginner', 'intermediate', 'advanced') NOT NULL,
+    courseImage VARCHAR(255),
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
   )`);
