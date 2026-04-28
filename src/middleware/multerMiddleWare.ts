@@ -1,13 +1,13 @@
-import { Request } from "express";
-import multer from "multer";
+// import { Request } from "express";
+// import multer from "multer";
 
-const storage = multer.diskStorage({
-  destination: function (req: Request, file: Express.Multer.File, cb: any) {
-    cb(null, "./src/storage");
-  },
-  filename: function (req: Request, file: Express.Multer.File, cb: any) {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: function (req: Request, file: Express.Multer.File, cb: any) {
+//     cb(null, "../server/src/upload");
+//   },
+//   filename: function (req: Request, file: Express.Multer.File, cb: any) {
+//     cb(null, Date.now() + "-" + file.originalname);
+//   },
+// });
 
-export default {multer, storage };
+// export { multer, storage };
