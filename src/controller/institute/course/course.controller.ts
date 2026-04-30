@@ -59,9 +59,10 @@ export class CourseController {
 
   static async getAllCourses(req: IExtendedRequest, res: Response) {
     const instituteNumber = req.user?.currentInstituteNumber;
-    const [courses] = await sequelize.query(
-      `SELECT * FROM course_${instituteNumber}`,
+    const courses = await sequelize.query(
+      `SELECT*FROM course_${instituteNumber}`,
     );
+    console.log(courses);
     res.status(200).json({
       message: "All Courses retrieved successfully",
       data: courses,

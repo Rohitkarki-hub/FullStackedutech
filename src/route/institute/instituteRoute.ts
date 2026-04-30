@@ -4,6 +4,7 @@ import {
   createCourseTable,
   createStudentTable,
   createTeacherTable,
+  createCategoryTable,
   InstituteController,
 } from "../../controller/institute/institute.controller";
 import Middleware from "../../middleware/middleware";
@@ -14,10 +15,11 @@ const router: Router = express.Router();
 router
   .route("/")
   .post(
-    asyncErrorHandle(Middleware.isloggedIn),
-    asyncErrorHandle(InstituteController.createInstitute),
-    asyncErrorHandle(createTeacherTable),
-    asyncErrorHandle(createStudentTable),
+    Middleware.isloggedIn,
+    InstituteController.createInstitute,
+    createTeacherTable,
+    createStudentTable,
+    createCategoryTable,
     asyncErrorHandle(createCourseTable),
   );
 

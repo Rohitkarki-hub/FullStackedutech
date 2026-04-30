@@ -1,4 +1,4 @@
-import express, { Router } from "express";
+import express, { Request, Router } from "express";
 import { CourseController } from "../../../controller/institute/course/course.controller";
 import Middleware from "../../../middleware/middleware";
 import asyncErrorHandle from "../../../services/asyncErrorHandle";
@@ -8,7 +8,18 @@ import multer from "multer";
 
 // const upload = multer({ storage: storage });
 import { cloudinary, storage } from "../../../services/cloudinaryConfig";
-const upload = multer({ storage: storage });
+const upload = multer({
+  storage: storage,
+  fileFilter: (req: Request, file: Express.Multer.File, cb) => {
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+    if (allowedTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error("Invalid file type. Only JPEG, PNG, and JPG are allowed."));
+    }
+  },
+  limits: { fileSize: 4 * 1024 * 1024 },
+});
 const router: Router = express.Router();
 
 router
@@ -17,18 +28,17 @@ router
     Middleware.isloggedIn,
     upload.single("courseImage"),
     asyncErrorHandle(CourseController.createCourse),
-  );
-
-// .get(asyncErrorHandle(CourseController.getAllCourses));
+  )
+  .get(Middleware.isloggedIn, asyncErrorHandle(CourseController.getAllCourses));
 router
   .route("/:id")
   .get(
     Middleware.isloggedIn,
-    // asyncErrorHandle(CourseController.getSingleCourse),
+    asyncErrorHandle(CourseController.getSingleCourse),
   )
   .delete(
     Middleware.isloggedIn,
-    // asyncErrorHandle(CourseController.deleteCourse),
+    asyncErrorHandle(CourseController.deleteCourse),
   );
 
 export default router;
