@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import User from "../../../database/models/user.model";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import generateJWTToken from "../../../services/generateJwtToken";
 
 // const registerUser = async (req: Request, res: Response) => {
 //   const { username, email, password } = req.body;
@@ -61,11 +62,7 @@ class AuthController {
         .compare(password, data[0].password)
         .then((isMatch) => {
           if (isMatch) {
-            const token = jwt.sign(
-              { id: data[0].id },
-              process.env.JWT_SECRET as string,
-              { expiresIn: "1d" },
-            );
+            const token = generateJWTToken({ id: data[0].id });
             res.status(200).json({ message: "Login successful", token });
           } else {
             res.status(401).json({ message: "Invalid credentials" });

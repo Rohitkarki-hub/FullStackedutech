@@ -92,9 +92,10 @@ const createTeacherTable = async (
     teacherEmail VARCHAR(255) NOT NULL UNIQUE,
     teacherPhone VARCHAR(255) NOT NULL UNIQUE,
     teacherExpertise VARCHAR(255) NOT NULL,
-    joinDate DATE ,
-    salary VARCHAR(255) NOT NULL,
-    
+    teacherJoinDate DATE ,
+    teacherSalary VARCHAR(255) NOT NULL,
+    teacherImage VARCHAR(255),
+    teacherPassword VARCHAR(255) ,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
   )`);
@@ -120,7 +121,6 @@ const createStudentTable = async (
   )`);
   next();
 };
-
 const createCourseTable = async (
   req: IExtendedRequest,
   res: Response,
@@ -128,19 +128,22 @@ const createCourseTable = async (
 ) => {
   const instituteNumber = req.instituteNumber;
   await sequelize.query(`CREATE TABLE IF NOT EXISTS course_${instituteNumber} (
-    id VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
-    courseName VARCHAR(255) NOT NULL UNIQUE,
-    coursePrice VARCHAR(255) NOT NULL ,
-    courseDescription TEXT,
-    courseDuration VARCHAR(255) NOT NULL,
-    courseLevel ENUM('beginner', 'intermediate', 'advanced') NOT NULL,
-    courseImage VARCHAR(255),
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-  )`);
-
+  id VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
+  courseName VARCHAR(255) NOT NULL UNIQUE,
+  coursePrice VARCHAR(255) NOT NULL ,
+  courseDescription TEXT,
+  courseDuration TEXT NOT NULL,
+  courseLevel ENUM('beginner', 'intermediate', 'advanced') NOT NULL,
+  courseImage VARCHAR(255),
+  teacherId VARCHAR(36)  REFERENCES teacher_${instituteNumber}(id),
+  categoryId VARCHAR(36) NOT NULL REFERENCES category_${instituteNumber}(id),
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)`);
   res.status(201).json({ message: "Institute created successfully" });
+  next();
 };
+
 const createCategoryTable = async (
   req: IExtendedRequest,
   res: Response,
@@ -158,17 +161,12 @@ const createCategoryTable = async (
     await sequelize.query(
       `INSERT INTO category_${instituteNumber} (categoryName, categoryDescription) VALUES (?, ?)`,
       {
-        replacements: [
-          "Web Development",
-          "Default category for uncategorized courses",
-        ],
+        replacements: [category.categoryName, category.categoryDescription],
       },
     );
   });
-  res.status(201).json({ message: "Category table created successfully" });
-
-  return;
 };
+
 export {
   InstituteController,
   createTeacherTable,

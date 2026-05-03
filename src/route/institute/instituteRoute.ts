@@ -19,8 +19,8 @@ router
     InstituteController.createInstitute,
     createTeacherTable,
     createStudentTable,
-    createCategoryTable,
     asyncErrorHandle(createCourseTable),
+    createCategoryTable,
   );
 
 export default router;

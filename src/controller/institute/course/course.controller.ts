@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import sequelize from "../../../database/connection";
 import { IExtendedRequest } from "../../../middleware/type";
+import { QueryTypes } from "sequelize";
 
 export class CourseController {
   static async createCourse(req: IExtendedRequest, res: Response) {
@@ -12,13 +13,15 @@ export class CourseController {
       courseDescription,
       courseDuration,
       courseLevel,
+      categoryId,
     } = req.body;
     if (
       !courseName ||
       !coursePrice ||
       !courseDescription ||
       !courseDuration ||
-      !courseLevel
+      !courseLevel ||
+      !categoryId
     ) {
       return res.status(400).json({ message: "All fields are required" });
     }
@@ -27,7 +30,7 @@ export class CourseController {
     console.log("Course Image:", courseImage);
 
     await sequelize.query(
-      `INSERT INTO course_${instituteNumber} (courseName, coursePrice, courseDescription, courseDuration, courseLevel, courseImage) VALUES (?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO course_${instituteNumber} (courseName, coursePrice, courseDescription, courseDuration, courseLevel, courseImage, categoryId) VALUES (?, ?, ?, ?, ?, ?, ?)`,
       {
         replacements: [
           courseName,
@@ -36,7 +39,9 @@ export class CourseController {
           courseDuration,
           courseLevel,
           courseImage,
+          categoryId,
         ],
+        type: QueryTypes.INSERT,
       },
     );
     res.status(201).json({ message: "Course created successfully" });
@@ -49,6 +54,7 @@ export class CourseController {
       `DELETE FROM course_${instituteNumber} WHERE id = ?`,
       {
         replacements: [courseId],
+        type: QueryTypes.DELETE,
       },
     );
 
@@ -57,11 +63,38 @@ export class CourseController {
     }
   }
 
+  // static async getAllCourses(req: IExtendedRequest, res: Response) {
+  //   const instituteNumber = req.user?.currentInstituteNumber;
+  //   const courses = await sequelize.query(
+  //     `SELECT*FROM course_${instituteNumber} JOIN COURSE_${instituteNumber} ON course_${instituteNumber}.categoryId = category_${instituteNumber}.id`,
+  //     {
+  //       type: QueryTypes.SELECT,
+  //     },
+  //   );
+  //   console.log(courses);
+  //   res.status(200).json({
+  //     message: "All Courses retrieved successfully",
+  //     data: courses,
+  //   });
+  // }
+
   static async getAllCourses(req: IExtendedRequest, res: Response) {
     const instituteNumber = req.user?.currentInstituteNumber;
-    const courses = await sequelize.query(
-      `SELECT*FROM course_${instituteNumber}`,
-    );
+
+    // Use aliases (c and cat) to keep the query readable and avoid 'Not unique' errors
+    const query = `
+      SELECT 
+        c.*, 
+        cat.categoryName, 
+        cat.categoryDescription 
+      FROM course_${instituteNumber} AS c
+      JOIN category_${instituteNumber} AS cat ON c.categoryId = cat.id
+    `;
+
+    const courses = await sequelize.query(query, {
+      type: QueryTypes.SELECT,
+    });
+
     console.log(courses);
     res.status(200).json({
       message: "All Courses retrieved successfully",
@@ -76,6 +109,7 @@ export class CourseController {
       `SELECT * FROM course_${instituteNumber} WHERE id = ?`,
       {
         replacements: [courseId],
+        type: QueryTypes.SELECT,
       },
     );
     res.status(200).json({
