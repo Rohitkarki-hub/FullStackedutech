@@ -17,5 +17,6 @@ const studentSilice = createSlice({
 
 const { setData } = studentSilice.actions;
 export { setData };
+dispatch(setData("hello"));
 
 export default studentSilice.reducer;

@@ -7,6 +7,6 @@ export interface IstudentInitialState {
 }
 
 export interface IteacherInitialState {
-  TeacherName: string | null;
-  TeacherPassword: string | null;
+  teacherName: string | null;
+  teacherPassword: string | null;
 }

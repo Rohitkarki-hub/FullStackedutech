@@ -2,8 +2,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IteacherInitialState } from "./type";
 
 const teacherInitialState: IteacherInitialState = {
-  TeacherName: "a",
-  TeacherPassword: "b",
+  teacherName: "asada",
+  teacherPassword: "bsdasdsa",
 };
 
 const teacherSlice = createSlice({
@@ -11,16 +11,16 @@ const teacherSlice = createSlice({
   initialState: teacherInitialState,
 
   reducers: {
-    setName: (state, action: PayloadAction<string>) => {
-      state.TeacherName = action.payload;
+    setTeacherName: (state, action: PayloadAction<string>) => {
+      state.teacherName = "hehe";
     },
-    setAddress: (state, action) => {
-      state.TeacherPassword = "hehe";
+    setTeacherPassword: (state, action) => {
+      state.teacherPassword = "haha";
     },
   },
 });
 
-const { setName, setAddress } = teacherSlice.actions;
-export { setName, setAddress };
+const { setTeacherName, setTeacherPassword } = teacherSlice.actions;
+export { setTeacherName, setTeacherPassword };
 
 export default teacherSlice.reducer;
