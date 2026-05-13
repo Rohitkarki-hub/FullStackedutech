@@ -1,0 +1,91 @@
+import { ChangeEvent, SubmitEvent, useState } from "react";
+
+import { registerUser } from "@/src/lib/store/auth/authSlice";
+import { useAppDispatch } from "@/src/lib/store/hooks";
+import { IRegisterData } from "./register.types";
+
+function Register() {
+  const dispatch = useAppDispatch();
+  const [data, setData] = useState<IRegisterData>({
+    email: "",
+    username: "",
+    password: "",
+  });
+  const handleRegisterDataChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setData({
+      ...data,
+      [name]: value,
+    });
+    const handleRegisterSubmission = (e: SubmitEvent) => {
+      dispatch(registerUser(data));
+    };
+  };
+
+  return (
+    <>
+      <div className="bg-green-200 min-h-screen flex items-center">
+        <div className="bg-white p-10 md:w-2/3 lg:w-1/2 mx-auto rounded">
+          <form action="">
+            <div className="flex items-center mb-5">
+              <label
+                htmlFor="name"
+                className="w-20 inline-block text-right mr-4 text-gray-500 "
+              >
+                Name
+              </label>
+              <input
+                onChange={handleRegisterDataChange}
+                name="name"
+                id="name"
+                type="text"
+                placeholder="Your name"
+                className="border-b-2 border-gray-400 flex-1 py-2 placeholder-gray-300 outline-none focus:border-green-400"
+              />
+            </div>
+            <div className="flex items-center mb-10">
+              <label
+                htmlFor="twitter"
+                className="w-20 inline-block text-right mr-4 text-gray-500 "
+              >
+                User Name
+              </label>
+              <input
+                onChange={handleRegisterDataChange}
+                type="text"
+                name="twitter"
+                id="twitter"
+                placeholder="Your Twitter pseudonym"
+                className="border-b-2 border-gray-400 flex-1 py-2 placeholder-gray-300 outline-none focus:border-green-400"
+              />
+            </div>
+            <div className="flex items-center mb-10">
+              <label
+                htmlFor="twitter"
+                className="w-20 inline-block text-right mr-4 text-gray-500 "
+              >
+                Password
+              </label>
+              <input
+                onChange={handleRegisterDataChange}
+                type="text"
+                name="twitter"
+                id="twitter"
+                placeholder="Your Twitter pseudonym"
+                className="border-b-2 border-gray-400 flex-1 py-2 placeholder-gray-300 outline-none focus:border-green-400"
+              />
+            </div>
+
+            <div className="text-right">
+              <button className="py-3 px-8 bg-green-500 text-green-100 font-bold rounded">
+                Register
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export default Register;
