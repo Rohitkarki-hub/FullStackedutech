@@ -63,7 +63,13 @@ class AuthController {
         .then((isMatch) => {
           if (isMatch) {
             const token = generateJWTToken({ id: data[0].id });
-            res.status(200).json({ message: "Login successful", token });
+            res.status(200).json({
+              data: {
+                token: token,
+                username: data[0].username,
+              },
+              message: "Login successfulllllylylylyly",
+            });
           } else {
             res.status(401).json({ message: "Invalid credentials" });
           }

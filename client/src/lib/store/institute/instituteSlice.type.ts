@@ -1,10 +1,12 @@
 import { Status } from "../../types.ts/types";
 
-interface IInstitute {
+export interface IInstitute {
+  instituteAddress: string;
   instituteName: string;
   instituteEmail: string;
-  institutephoneNumber: string;
-  instituteAddress: string;
+  institutePhone: string;
+  institutePanNumber?: string;
+  instituteVatNumber?: string;
 }
 
 export interface IInstituteInitialData {

@@ -1,8 +1,8 @@
 import { Status } from "../../types.ts/types";
 
-interface IUserData {
+export interface IUserData {
   username: string;
-  password: string;
+  token: string;
 }
 
 export interface IRegisterData extends IUserData {

@@ -1,6 +1,7 @@
 import { Response } from "express";
 import { IExtendedRequest } from "../../../middleware/type";
 import sequelize from "../../../database/connection";
+import { QueryTypes } from "sequelize";
 
 class CategoryController {
   static async createCategory(req: IExtendedRequest, res: Response) {
@@ -13,9 +14,26 @@ class CategoryController {
       `INSERT INTO category_${institutenumber} (categoryName, categoryDescription) VALUES (?, ?)`,
       {
         replacements: [categoryName, categoryDescription],
+        type: QueryTypes.INSERT,
       },
     );
-    res.status(201).json({ message: "Category added successfully" });
+    const [CategoryData]: { id: string; createdAt: Date }[] =
+      await sequelize.query(
+        `SELECT * FROM category_${institutenumber} WHERE categoryName = ?`,
+        {
+          replacements: [categoryName],
+          type: QueryTypes.SELECT,
+        },
+      );
+    res.status(201).json({
+      message: "Category added successfully",
+      data: {
+        categoryName,
+        categoryDescription,
+        id: CategoryData.id,
+        createdAt: CategoryData.createdAt,
+      },
+    });
   }
   static getCategories = async (req: IExtendedRequest, res: Response) => {
     const instituteNumber = req.user?.currentInstituteNumber;
@@ -24,7 +42,7 @@ class CategoryController {
     );
     res
       .status(200)
-      .json({ message: "Categories retrieved successfully", categories });
+      .json({ message: "Categories retrieved successfully", data: categories });
   };
 
   static deleteCategory = async (req: IExtendedRequest, res: Response) => {

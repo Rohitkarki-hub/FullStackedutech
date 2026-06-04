@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IInstituteTeacherInitialData } from "./institute-teacher-type";
 import { Status } from "@/src/lib/types.ts/types";
-import { setStatus } from "../instituteSice";
+import { setStatus } from "../instituteSlice";
 import { setTeacher } from "../../teacher/teacherSlice";
-import { appDispatch } from "../../store";
-import { API } from "@/src/lib/http";
+import { AppDispatch } from "../../store";
+import { API } from "@/src/lib/http/Api";
 
 const inititalState: IInstituteTeacherInitialData = {
   teacher: {
@@ -49,7 +49,7 @@ export const {
 export default instituteTeacherSlice.reducer;
 
 export function createInstituteTeacher(data: IInstituteTeacherInitialData) {
-  return async function createInstituteTeacherThunk(dispatch: appDispatch) {
+  return async function createInstituteTeacherThunk(dispatch: AppDispatch) {
     try {
       const response = await API.post("/institute/teacher", data);
       if (response.status === 201) {
@@ -64,7 +64,7 @@ export function createInstituteTeacher(data: IInstituteTeacherInitialData) {
 }
 
 export function fetchInstituteTeacher() {
-  return async function fetchInstituteTeacherThunk(dispatch: appDispatch) {
+  return async function fetchInstituteTeacherThunk(dispatch: AppDispatch) {
     try {
       const response = await API.get("/institute/teacher");
       if (response.status === 200) {
@@ -80,7 +80,7 @@ export function fetchInstituteTeacher() {
 }
 
 export function deleteInstituteTeacher(id: string) {
-  return async function deleteInstituteTeacherThunk(dispatch: appDispatch) {
+  return async function deleteInstituteTeacherThunk(dispatch: AppDispatch) {
     try {
       const response = await API.delete(`/institute/teacher/${id}`);
       if (response.status === 200) {

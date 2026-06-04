@@ -8,10 +8,17 @@ import studentRoute from "./route/student/studentRoute";
 import categoryRoute from "./route/institute/category/categoryRoute";
 import teacherInstituteRoute from "./route/institute/teacher/teacherRoute";
 import teacherRoute from "./route/teacher/teacherRoute";
+import cors from "cors";
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+  }),
+);
 
 app.use(express.json());
 
-app.use("/api/", authRoute);
+app.use("/api/auth", authRoute);
 app.use("/api/institute", instituteRoute);
 app.use("/api/student", studentRoute);
 app.use("/api/institute/courses", courseRoute);
